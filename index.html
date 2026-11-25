@@ -5,7 +5,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NOVARA Bank | Dashboard</title>
-
 <style>
 :root {
   --navy: #102542;
@@ -17,529 +16,181 @@
   --green: #16845b;
   --red: #c34b54;
 }
-
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-body {
-  font-family: Arial, Helvetica, sans-serif;
-  background: var(--light);
-  color: var(--text);
-}
-
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: Arial, Helvetica, sans-serif; background: var(--light); color: var(--text); }
 header {
-  height: 76px;
-  background: white;
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 35px;
+  height: 76px; background: white; border-bottom: 1px solid var(--border);
+  display: flex; justify-content: space-between; align-items: center; padding: 0 35px;
 }
-
-.logo {
-  font-size: 23px;
-  font-weight: 800;
-  letter-spacing: 2px;
-  color: var(--navy);
-}
-
-.logo span {
-  color: var(--blue);
-}
-
-.profile {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font-size: 14px;
-  font-weight: 600;
-}
-
+.logo { font-size: 23px; font-weight: 800; letter-spacing: 2px; color: var(--navy); }
+.logo span { color: var(--blue); }
+.profile { display: flex; align-items: center; gap: 12px; font-size: 14px; font-weight: 600; }
 .avatar {
-  width: 39px;
-  height: 39px;
-  background: var(--navy);
-  color: white;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  font-weight: bold;
+  width: 39px; height: 39px; background: var(--navy); color: white;
+  border-radius: 50%; display: grid; place-items: center; font-weight: bold;
 }
-
-.layout {
-  display: flex;
-  min-height: calc(100vh - 76px);
-}
-
+.layout { display: flex; min-height: calc(100vh - 76px); }
 .sidebar {
-  width: 230px;
-  background: white;
-  border-right: 1px solid var(--border);
-  padding: 28px 16px;
-  flex-shrink: 0;
+  width: 230px; background: white; border-right: 1px solid var(--border);
+  padding: 28px 16px; flex-shrink: 0;
 }
-
 .sidebar p {
-  color: var(--muted);
-  font-size: 11px;
-  font-weight: bold;
-  letter-spacing: 1.2px;
+  color: var(--muted); font-size: 11px; font-weight: bold; letter-spacing: 1.2px;
   margin: 10px 12px 18px;
 }
-
 .sidebar a {
-  display: block;
-  text-decoration: none;
-  color: #59677a;
-  padding: 14px 13px;
-  margin-bottom: 5px;
-  border-radius: 8px;
-  font-size: 14px;
+  display: block; text-decoration: none; color: #59677a; padding: 14px 13px;
+  margin-bottom: 5px; border-radius: 8px; font-size: 14px;
 }
-
-.sidebar a.active,
-.sidebar a:hover {
-  background: #edf3fc;
-  color: var(--blue);
-  font-weight: bold;
+.sidebar a.active, .sidebar a:hover {
+  background: #edf3fc; color: var(--blue); font-weight: bold;
 }
-
-main {
-  flex: 1;
-  padding: 35px;
-  max-width: 1500px;
-}
-
+main { flex: 1; padding: 35px; max-width: 1500px; }
 .welcome {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 28px;
-  flex-wrap: wrap;
-  gap: 12px;
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 28px; flex-wrap: wrap; gap: 12px;
 }
-
-.welcome h1 {
-  font-size: 25px;
-  color: var(--navy);
-  margin-bottom: 7px;
-}
-
-.welcome p {
-  color: var(--muted);
-  font-size: 14px;
-}
-
-.date {
-  color: var(--muted);
-  font-size: 13px;
-}
-
+.welcome h1 { font-size: 25px; color: var(--navy); margin-bottom: 7px; }
+.welcome p { color: var(--muted); font-size: 14px; }
+.date { color: var(--muted); font-size: 13px; }
 .dashboard-grid {
-  display: grid;
-  grid-template-columns: 1.5fr 1fr;
-  gap: 20px;
-  margin-bottom: 22px;
+  display: grid; grid-template-columns: 1.5fr 1fr; gap: 20px; margin-bottom: 22px;
 }
-
 .card {
-  background: white;
-  border: 1px solid var(--border);
-  border-radius: 13px;
-  padding: 24px;
-  box-shadow: 0 3px 12px rgba(20, 40, 70, 0.025);
+  background: white; border: 1px solid var(--border); border-radius: 13px;
+  padding: 24px; box-shadow: 0 3px 12px rgba(20, 40, 70, 0.025);
 }
-
 .balance-card {
-  background: linear-gradient(120deg, #102542, #1c477b);
-  color: white;
-  min-height: 220px;
-  position: relative;
-  overflow: hidden;
+  background: linear-gradient(120deg, #102542, #1c477b); color: white;
+  min-height: 220px; position: relative; overflow: hidden;
 }
-
 .balance-card::after {
-  content: "";
-  position: absolute;
-  width: 220px;
-  height: 220px;
-  border: 1px solid rgba(255,255,255,.12);
-  border-radius: 50%;
-  right: -65px;
-  top: 35px;
-  box-shadow: 0 0 0 25px rgba(255,255,255,.025),
-              0 0 0 50px rgba(255,255,255,.02);
+  content: ""; position: absolute; width: 220px; height: 220px;
+  border: 1px solid rgba(255,255,255,.12); border-radius: 50%;
+  right: -65px; top: 35px;
+  box-shadow: 0 0 0 25px rgba(255,255,255,.025), 0 0 0 50px rgba(255,255,255,.02);
 }
-
-.balance-label {
-  color: #c5d4e8;
-  font-size: 14px;
-}
-
+.balance-label { color: #c5d4e8; font-size: 14px; }
 .balance-amount {
-  font-size: 36px;
-  font-weight: bold;
-  margin: 18px 0 8px;
-  letter-spacing: .5px;
+  font-size: 36px; font-weight: bold; margin: 18px 0; letter-spacing: .5px;
 }
-
-.pending-label {
-  display: inline-block;
-  background: #fff0d3;
-  color: #916b21;
-  padding: 5px 10px;
-  border-radius: 5px;
-  font-size: 11px;
-  font-weight: bold;
-  position: relative;
-  z-index: 1;
+.pending-badge {
+  display: inline-block; position: relative; z-index: 1;
+  background: #fff0d3; color: #916b21; padding: 6px 11px;
+  border-radius: 5px; font-size: 11px; font-weight: bold; letter-spacing: .5px;
 }
-
 .balance-bottom {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  position: relative;
-  z-index: 1;
-  margin-top: 15px;
+  display: flex; justify-content: space-between; align-items: center;
+  position: relative; z-index: 1; margin-top: 15px;
 }
-
-.balance-bottom small {
-  color: #c5d4e8;
-}
-
+.balance-bottom small { color: #c5d4e8; }
 .light-button {
-  border: 1px solid rgba(255,255,255,.4);
-  background: transparent;
-  color: white;
-  padding: 8px 13px;
-  border-radius: 6px;
-  cursor: pointer;
+  border: 1px solid rgba(255,255,255,.4); background: transparent; color: white;
+  padding: 8px 13px; border-radius: 6px; cursor: pointer;
 }
-
-.card h3 {
-  color: var(--navy);
-  font-size: 16px;
-  margin-bottom: 20px;
-}
-
+.card h3 { color: var(--navy); font-size: 16px; margin-bottom: 20px; }
 .account-row {
-  display: flex;
-  justify-content: space-between;
-  padding: 12px 0;
-  border-bottom: 1px solid var(--border);
-  font-size: 13px;
-  gap: 10px;
+  display: flex; justify-content: space-between; padding: 12px 0;
+  border-bottom: 1px solid var(--border); font-size: 13px; gap: 10px;
 }
-
-.account-row:last-child {
-  border-bottom: none;
-}
-
-.account-row span:first-child {
-  color: var(--muted);
-}
-
-.status {
-  color: var(--green);
-  font-weight: bold;
-}
-
+.account-row:last-child { border-bottom: none; }
+.account-row span:first-child { color: var(--muted); }
+.status { color: var(--green); font-weight: bold; }
 .quick-actions {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 15px;
-  margin-bottom: 22px;
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 22px;
 }
-
 .action {
-  background: white;
-  border: 1px solid var(--border);
-  border-radius: 11px;
-  padding: 20px 12px;
-  text-align: center;
-  cursor: pointer;
-  color: var(--navy);
-  font-weight: 600;
-  font-size: 13px;
+  background: white; border: 1px solid var(--border); border-radius: 11px;
+  padding: 20px 12px; text-align: center; cursor: pointer; color: var(--navy);
+  font-weight: 600; font-size: 13px;
 }
-
-.action:hover {
-  border-color: var(--blue);
-  background: #f8faff;
-}
-
-.action-icon {
-  font-size: 23px;
-  margin-bottom: 10px;
-}
-
+.action:hover { border-color: var(--blue); background: #f8faff; }
+.action-icon { font-size: 23px; margin-bottom: 10px; }
 .section-heading {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 18px;
+  display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px;
 }
-
-.section-heading h3 {
-  margin: 0;
-}
-
+.section-heading h3 { margin: 0; }
 .loan-notice {
-  background: #fffaf0;
-  border: 1px solid #f0dfb8;
-  border-radius: 9px;
-  padding: 20px;
-  margin-bottom: 20px;
+  background: #fffaf0; border: 1px solid #f0dfb8; border-radius: 9px;
+  padding: 20px; margin-bottom: 20px;
 }
-
 .loan-notice .notice-label {
-  color: #916b21;
-  font-size: 10px;
-  font-weight: bold;
-  letter-spacing: 1px;
-  margin-bottom: 10px;
+  color: #916b21; font-size: 10px; font-weight: bold;
+  letter-spacing: 1px; margin-bottom: 10px;
 }
-
-.loan-notice h4 {
-  color: #4b3c20;
-  margin-bottom: 15px;
-  font-size: 16px;
-}
-
-.loan-notice p {
-  color: #66583e;
-  font-size: 13px;
-  line-height: 1.9;
-}
-
-.loan-amount {
-  font-size: 23px;
-  font-weight: bold;
-  color: var(--navy);
-  margin: 12px 0;
-}
-
-.loan-fee {
-  font-size: 17px;
-  font-weight: bold;
-  color: #916b21;
-  margin: 8px 0;
-}
-
+.loan-notice h4 { color: #4b3c20; margin-bottom: 15px; font-size: 16px; }
+.loan-notice p { color: #66583e; font-size: 13px; line-height: 1.9; }
+.loan-amount { font-size: 23px; font-weight: bold; color: var(--navy); margin: 12px 0; }
+.loan-fee { font-size: 17px; font-weight: bold; color: #916b21; margin: 8px 0; }
 .loan-status {
-  display: inline-block;
-  background: #fff0d3;
-  color: #916b21;
-  padding: 6px 11px;
-  border-radius: 5px;
-  font-size: 12px;
-  font-weight: bold;
-  margin-top: 7px;
+  display: inline-block; background: #fff0d3; color: #916b21;
+  padding: 6px 11px; border-radius: 5px; font-size: 12px;
+  font-weight: bold; margin-top: 7px;
 }
-
 .transaction {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 15px 0;
-  border-bottom: 1px solid var(--border);
-  gap: 12px;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 15px 0; border-bottom: 1px solid var(--border); gap: 12px;
 }
-
-.transaction:last-child {
-  border-bottom: none;
-}
-
-.transaction-info {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
+.transaction:last-child { border-bottom: none; }
+.transaction-info { display: flex; align-items: center; gap: 12px; }
 .transaction-icon {
-  width: 38px;
-  height: 38px;
-  background: #edf3fc;
-  color: var(--blue);
-  display: grid;
-  place-items: center;
-  border-radius: 50%;
-  font-size: 17px;
+  width: 38px; height: 38px; background: #edf3fc; color: var(--blue);
+  display: grid; place-items: center; border-radius: 50%; font-size: 17px;
 }
-
-.transaction-info strong {
-  display: block;
-  font-size: 13px;
-  margin-bottom: 5px;
-}
-
-.transaction-info small {
-  color: var(--muted);
-  font-size: 11px;
-}
-
-.amount {
-  font-size: 13px;
-  font-weight: bold;
-  white-space: nowrap;
-}
-
-.positive {
-  color: var(--green);
-}
-
-.negative {
-  color: var(--red);
-}
-
+.transaction-info strong { display: block; font-size: 13px; margin-bottom: 5px; }
+.transaction-info small { color: var(--muted); font-size: 11px; }
+.amount { font-size: 13px; font-weight: bold; white-space: nowrap; }
+.positive { color: var(--green); }
+.negative { color: var(--red); }
 .forms-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-  margin-top: 22px;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 22px;
 }
-
-form label {
-  display: block;
-  font-size: 12px;
-  color: #657287;
-  margin: 15px 0 7px;
+form label { display: block; font-size: 12px; color: #657287; margin: 15px 0 7px; }
+form input, form select {
+  width: 100%; padding: 12px; border: 1px solid #dfe5ed;
+  border-radius: 7px; font-size: 13px; outline: none;
 }
-
-form input,
-form select {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid #dfe5ed;
-  border-radius: 7px;
-  font-size: 13px;
-  outline: none;
-}
-
-form input:focus,
-form select:focus {
-  border-color: var(--blue);
-}
-
+form input:focus, form select:focus { border-color: var(--blue); }
 .primary-button {
-  background: var(--blue);
-  color: white;
-  border: none;
-  border-radius: 7px;
-  padding: 12px 18px;
-  margin-top: 18px;
-  cursor: pointer;
-  font-weight: bold;
-  width: 100%;
+  background: var(--blue); color: white; border: none; border-radius: 7px;
+  padding: 12px 18px; margin-top: 18px; cursor: pointer;
+  font-weight: bold; width: 100%;
 }
-
-.primary-button:hover {
-  background: var(--navy);
-}
-
-.settings {
-  margin-top: 22px;
-}
-
+.primary-button:hover { background: var(--navy); }
+.settings { margin-top: 22px; }
 .settings button {
-  padding: 10px 15px;
-  border: 1px solid var(--border);
-  background: white;
-  border-radius: 7px;
-  cursor: pointer;
-  color: var(--navy);
+  padding: 10px 15px; border: 1px solid var(--border); background: white;
+  border-radius: 7px; cursor: pointer; color: var(--navy);
 }
-
 footer {
-  text-align: center;
-  padding: 25px;
-  color: var(--muted);
-  font-size: 11px;
-  line-height: 1.7;
+  text-align: center; padding: 25px; color: var(--muted);
+  font-size: 11px; line-height: 1.7;
 }
-
-#message {
-  margin-top: 12px;
-  font-size: 13px;
-  color: var(--green);
-}
-
+#message { margin-top: 12px; font-size: 13px; color: var(--green); }
 @media(max-width: 900px) {
-  .sidebar {
-    width: 190px;
-  }
-
-  main {
-    padding: 24px;
-  }
-
-  .dashboard-grid {
-    grid-template-columns: 1fr;
-  }
+  .sidebar { width: 190px; }
+  main { padding: 24px; }
+  .dashboard-grid { grid-template-columns: 1fr; }
 }
-
 @media(max-width: 650px) {
-  header {
-    padding: 0 18px;
-  }
-
-  .layout {
-    display: block;
-  }
-
+  header { padding: 0 18px; }
+  .layout { display: block; }
   .sidebar {
-    width: 100%;
-    display: flex;
-    overflow-x: auto;
-    padding: 10px;
-    border-right: none;
-    border-bottom: 1px solid var(--border);
+    width: 100%; display: flex; overflow-x: auto; padding: 10px;
+    border-right: none; border-bottom: 1px solid var(--border);
   }
-
-  .sidebar p {
-    display: none;
-  }
-
-  .sidebar a {
-    white-space: nowrap;
-    margin: 0 3px;
-    padding: 12px;
-  }
-
-  main {
-    padding: 20px 14px;
-  }
-
-  .welcome h1 {
-    font-size: 21px;
-  }
-
-  .balance-amount {
-    font-size: 29px;
-  }
-
-  .quick-actions {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .forms-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .date {
-    margin-top: 5px;
-  }
+  .sidebar p { display: none; }
+  .sidebar a { white-space: nowrap; margin: 0 3px; padding: 12px; }
+  main { padding: 20px 14px; }
+  .welcome h1 { font-size: 21px; }
+  .balance-amount { font-size: 29px; }
+  .quick-actions { grid-template-columns: repeat(2, 1fr); }
+  .forms-grid { grid-template-columns: 1fr; }
+  .date { margin-top: 5px; }
 }
 </style>
 </head>
-
 <body>
-
 <header>
   <div class="logo">NOVA<span>RA</span></div>
   <div class="profile">
@@ -549,7 +200,6 @@ footer {
 </header>
 
 <div class="layout">
-
   <aside class="sidebar">
     <p>MAIN MENU</p>
     <a href="#overview" class="active">▦ &nbsp; Overview</a>
@@ -561,7 +211,6 @@ footer {
   </aside>
 
   <main id="overview">
-
     <div class="welcome">
       <div>
         <h1>Good morning, Christopher Wadass</h1>
@@ -571,75 +220,56 @@ footer {
     </div>
 
     <div class="dashboard-grid">
-
       <section class="card balance-card">
         <div class="balance-label">Displayed sample balance</div>
-        <div class="balance-amount" id="balance">RON 20,000.00</div>
-        <div class="pending-label">PENDING LOAN</div>
-
+        <div class="balance-amount" id="balance">RON 97,330.00</div>
+        <span class="pending-badge">PENDING LOAN</span>
         <div class="balance-bottom">
           <div>
             <small>Account holder</small><br>
             <strong>Christopher Wadass</strong>
           </div>
-          <button class="light-button" onclick="toggleBalance()">
-            Hide balance
-          </button>
+          <button class="light-button" onclick="toggleBalance()">Hide balance</button>
         </div>
       </section>
 
       <section class="card" id="account">
         <h3>Account information</h3>
-
         <div class="account-row">
           <span>Customer name</span>
           <strong>Christopher Wadass</strong>
         </div>
-
         <div class="account-row">
           <span>Account number</span>
           <strong>001234567890</strong>
         </div>
-
         <div class="account-row">
           <span>Account status</span>
           <strong class="status">Active</strong>
         </div>
-
         <div class="account-row">
           <span>Currency</span>
           <strong>RON</strong>
         </div>
       </section>
-
     </div>
 
     <div class="quick-actions">
-
       <div class="action" onclick="document.getElementById('transfers').scrollIntoView({behavior:'smooth'})">
-        <div class="action-icon">↗</div>
-        Transfer money
+        <div class="action-icon">↗</div>Transfer money
       </div>
-
       <div class="action" onclick="document.getElementById('payments').scrollIntoView({behavior:'smooth'})">
-        <div class="action-icon">＋</div>
-        Add payment
+        <div class="action-icon">＋</div>Add payment
       </div>
-
       <div class="action" onclick="document.getElementById('transactions').scrollIntoView({behavior:'smooth'})">
-        <div class="action-icon">↔</div>
-        Transactions
+        <div class="action-icon">↔</div>Transactions
       </div>
-
       <div class="action" onclick="document.getElementById('account').scrollIntoView({behavior:'smooth'})">
-        <div class="action-icon">▤</div>
-        Account details
+        <div class="action-icon">▤</div>Account details
       </div>
-
     </div>
 
     <section class="card" id="transactions">
-
       <div class="section-heading">
         <h3>Recent activity</h3>
         <span style="font-size:12px;color:#7c899b">Account activity</span>
@@ -647,27 +277,17 @@ footer {
 
       <div class="loan-notice">
         <div class="notice-label">SAMPLE LOAN APPLICATION</div>
-
         <h4>Loan Application Update</h4>
-
         <p>
           <strong>From:</strong> BCR LOAN FINANCE<br>
           <strong>Receiver:</strong> Christopher Wadass
         </p>
-
-        <div class="loan-amount">
-          Loan amount requested: RON 20,000.00
-        </div>
-
-        <div class="loan-fee">
-          Stated fee: RON 3,500.00
-        </div>
-
+        <div class="loan-amount">Loan amount requested: RON 97,330.00</div>
+        <div class="loan-fee">Stated fee: RON 17,032.00</div>
         <p>
           <strong>Approval status:</strong> Pending<br>
           <strong>Disbursement status:</strong> On Hold
         </p>
-
         <div class="loan-status">PENDING REVIEW</div>
       </div>
 
@@ -676,34 +296,22 @@ footer {
           No additional transactions recorded.
         </div>
       </div>
-
     </section>
 
     <div class="forms-grid">
-
       <section class="card" id="transfers">
         <h3>Make a transfer</h3>
-
         <form id="transferForm">
-
           <label>Recipient name</label>
           <input type="text" id="recipient" placeholder="Enter recipient name" required>
-
           <label>Recipient account</label>
           <input type="text" id="recipientAccount" placeholder="Enter account number" required>
-
           <label>Amount (RON)</label>
           <input type="number" id="transferAmount" min="0.01" step="0.01" placeholder="0.00" required>
-
           <label>Payment reference</label>
           <input type="text" id="reference" placeholder="Optional reference">
-
-          <button class="primary-button" type="submit">
-            Record sample transfer
-          </button>
-
+          <button class="primary-button" type="submit">Record sample transfer</button>
         </form>
-
         <p style="font-size:11px;color:#7c899b;margin-top:12px">
           Demonstration only. This does not send real money.
         </p>
@@ -711,52 +319,33 @@ footer {
 
       <section class="card" id="payments">
         <h3>Record incoming payment</h3>
-
         <form id="paymentForm">
-
           <label>Sender name</label>
           <input type="text" id="sender" placeholder="Enter sender name" required>
-
           <label>Payment description</label>
           <input type="text" id="description" placeholder="Payment description" required>
-
           <label>Amount (RON)</label>
           <input type="number" id="paymentAmount" min="0.01" step="0.01" placeholder="0.00" required>
-
-          <button class="primary-button" type="submit">
-            Record sample payment
-          </button>
-
+          <button class="primary-button" type="submit">Record sample payment</button>
         </form>
-
         <p style="font-size:11px;color:#7c899b;margin-top:12px">
           Demonstration only. No actual funds will be received.
         </p>
       </section>
-
     </div>
 
     <section class="card settings" id="settings">
-
       <h3>Account settings</h3>
-
       <form id="balanceForm">
         <label>Set displayed sample balance (RON)</label>
         <input type="number" id="newBalance" min="0" step="0.01" placeholder="Enter sample balance">
-
-        <button class="primary-button" type="submit">
-          Update sample balance
-        </button>
+        <button class="primary-button" type="submit">Update sample balance</button>
       </form>
-
       <div style="margin-top:20px">
         <button onclick="resetAccount()">Reset sample account</button>
       </div>
-
       <p id="message"></p>
-
     </section>
-
   </main>
 </div>
 
@@ -767,27 +356,23 @@ footer {
 </footer>
 
 <script>
-const DEFAULT_BALANCE = 20000;
-const BALANCE_VERSION = "2";
+const DEFAULT_BALANCE = 97330;
+const BALANCE_VERSION = "3";
 
-if (localStorage.getItem("novaraBalanceVersion") !== BALANCE_VERSION) {
-  localStorage.setItem("novaraBalance", DEFAULT_BALANCE.toFixed(2));
-  localStorage.setItem("novaraBalanceVersion", BALANCE_VERSION);
-}
-
+let savedVersion = localStorage.getItem("novaraBalanceVersion");
 let balance = Number(localStorage.getItem("novaraBalance"));
 
-if (!Number.isFinite(balance) || balance < 0) {
+if (savedVersion !== BALANCE_VERSION ||
+    !Number.isFinite(balance) || balance < 0) {
   balance = DEFAULT_BALANCE;
+  localStorage.setItem("novaraBalanceVersion", BALANCE_VERSION);
+  localStorage.setItem("novaraBalance", balance.toFixed(2));
 }
 
 let transactions = [];
 
 try {
-  transactions = JSON.parse(
-    localStorage.getItem("novaraTransactions") || "[]"
-  );
-
+  transactions = JSON.parse(localStorage.getItem("novaraTransactions") || "[]");
   if (!Array.isArray(transactions)) transactions = [];
 } catch {
   transactions = [];
@@ -797,6 +382,7 @@ let balanceHidden = false;
 
 function saveData() {
   localStorage.setItem("novaraBalance", balance.toFixed(2));
+  localStorage.setItem("novaraBalanceVersion", BALANCE_VERSION);
   localStorage.setItem("novaraTransactions", JSON.stringify(transactions));
 }
 
@@ -809,7 +395,6 @@ function formatMoney(amount) {
 
 function updateBalance() {
   const balanceElement = document.getElementById("balance");
-
   balanceElement.textContent = balanceHidden
     ? "RON ••••••"
     : "RON " + formatMoney(balance);
@@ -818,7 +403,6 @@ function updateBalance() {
 function toggleBalance() {
   balanceHidden = !balanceHidden;
   updateBalance();
-
   document.querySelector(".light-button").textContent =
     balanceHidden ? "Show balance" : "Hide balance";
 }
@@ -851,13 +435,11 @@ function renderTransactions() {
         <div class="transaction-icon">
           ${transaction.type === "Incoming" ? "↓" : "↑"}
         </div>
-
         <div>
           <strong>${escapeHTML(transaction.title)}</strong>
           <small>${escapeHTML(transaction.date)} · ${transaction.type}</small>
         </div>
       </div>
-
       <div class="amount ${transaction.type === "Incoming" ? "positive" : "negative"}">
         ${transaction.type === "Incoming" ? "+" : "-"}RON ${formatMoney(transaction.amount)}
       </div>
@@ -902,7 +484,6 @@ document.getElementById("transferForm").addEventListener("submit", function(even
     (reference ? " — " + reference : "");
 
   addTransaction("Outgoing", title, amount);
-
   this.reset();
 
   document.getElementById("message").textContent =
@@ -923,12 +504,7 @@ document.getElementById("paymentForm").addEventListener("submit", function(event
 
   balance += amount;
 
-  addTransaction(
-    "Incoming",
-    description + " — " + sender,
-    amount
-  );
-
+  addTransaction("Incoming", description + " — " + sender, amount);
   this.reset();
 
   document.getElementById("message").textContent =
@@ -946,7 +522,6 @@ document.getElementById("balanceForm").addEventListener("submit", function(event
   }
 
   balance = newBalance;
-
   saveData();
   updateBalance();
   this.reset();
@@ -980,6 +555,5 @@ document.getElementById("today").textContent =
 updateBalance();
 renderTransactions();
 </script>
-
 </body>
 </html>
