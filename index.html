@@ -1,0 +1,416 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NOVARA Bank | Digital Banking Demo</title>
+<style>
+:root {
+  --bg:#f4f6fb; --card:#fff; --navy:#111c35;
+  --blue:#315bea; --muted:#78839a; --border:#e9edf4;
+  --green:#15966b;
+}
+* {box-sizing:border-box}
+body {
+  margin:0; font-family:Inter,Arial,sans-serif;
+  background:var(--bg); color:var(--navy);
+}
+button,input,textarea {font:inherit}
+button {cursor:pointer}
+.app {display:flex;min-height:100vh}
+.sidebar {
+  width:245px;background:#101b34;color:white;
+  padding:28px 18px;display:flex;flex-direction:column;
+}
+.brand {font-size:23px;font-weight:800;letter-spacing:2px;padding:8px 12px}
+.brand span {color:#7e9aff}
+.demo {font-size:10px;color:#ffcf72;margin:10px 12px 30px}
+.nav-btn {
+  display:block;width:100%;text-align:left;padding:14px 15px;
+  margin:4px 0;border:0;border-radius:9px;
+  color:#b7c2d9;background:transparent;
+}
+.nav-btn.active,.nav-btn:hover {background:#25385f;color:white}
+.sidebar-bottom {margin-top:auto;color:#92a0ba;font-size:12px;padding:15px}
+.main {flex:1;min-width:0;padding:32px 4%;max-width:1500px}
+.top {display:flex;justify-content:space-between;align-items:center;margin-bottom:30px}
+.top h2 {margin:0;font-size:23px}
+.user {background:white;padding:10px 15px;border-radius:30px;font-size:13px}
+.notice {
+ background:#fff6df;border:1px solid #f2dfaa;color:#755b20;
+ padding:12px 16px;border-radius:10px;font-size:12px;margin-bottom:24px
+}
+.page {display:none}
+.page.active {display:block}
+.cards {display:grid;grid-template-columns:repeat(3,1fr);gap:17px}
+.card {
+ background:var(--card);padding:23px;border-radius:15px;
+ border:1px solid var(--border);margin-bottom:18px;
+}
+.balance {
+ background:linear-gradient(120deg,#182c58,#315bea);
+ color:white;border-radius:18px;padding:30px;
+ grid-column:span 2;
+}
+.label {font-size:12px;color:var(--muted);margin-bottom:12px}
+.balance .label {color:#cbd7ff}
+.amount {font-size:34px;font-weight:750;letter-spacing:-1px}
+.balance .amount {font-size:39px}
+.actions {display:flex;gap:10px;margin-top:25px;flex-wrap:wrap}
+.btn {
+ padding:12px 18px;border:0;border-radius:9px;
+ background:#315bea;color:white;font-weight:600
+}
+.btn.light {background:#edf1ff;color:#315bea}
+.btn.danger {background:#fff0f0;color:#bd3939}
+.btn.green {background:#e5f7ef;color:#13764f}
+.small {font-size:12px;color:var(--muted)}
+h3 {font-size:16px;margin:0 0 18px}
+.account-number {font-size:15px;font-weight:600;word-break:break-word}
+.transaction {
+ display:flex;justify-content:space-between;align-items:center;
+ padding:15px 0;border-bottom:1px solid var(--border);gap:12px
+}
+.transaction:last-child {border:0}
+.tx-title {font-size:13px;font-weight:650}
+.tx-date {font-size:11px;color:var(--muted);margin-top:5px}
+.positive {color:var(--green);font-weight:700}
+.negative {color:#d35b63;font-weight:700}
+form {max-width:550px}
+.field {margin:15px 0}
+.field label {display:block;font-size:12px;font-weight:650;margin-bottom:8px}
+.field input,.field textarea {
+ width:100%;padding:13px;border:1px solid var(--border);
+ border-radius:9px;background:white;outline:none
+}
+.field input:focus,.field textarea:focus {border-color:#315bea}
+.stat {font-size:25px;font-weight:750}
+.footer {font-size:11px;color:var(--muted);margin-top:35px}
+.empty {color:var(--muted);font-size:13px;padding:15px 0}
+@media(max-width:850px) {
+ .sidebar {width:190px}
+ .cards {grid-template-columns:1fr 1fr}
+ .balance {grid-column:span 2}
+}
+@media(max-width:600px) {
+ .app {display:block}
+ .sidebar {width:100%;padding:12px;display:block}
+ .brand {font-size:19px}
+ .demo {margin:4px 12px 10px}
+ .sidebar nav {display:flex;overflow-x:auto}
+ .nav-btn {white-space:nowrap;width:auto;margin:0 3px;padding:11px}
+ .sidebar-bottom {display:none}
+ .main {padding:22px 14px}
+ .cards {grid-template-columns:1fr}
+ .balance {grid-column:span 1}
+ .top h2 {font-size:19px}
+ .amount,.balance .amount {font-size:29px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+<aside class="sidebar">
+  <div class="brand">NOVARA<span>.</span></div>
+  <div class="demo">● DIGITAL BANKING DEMO</div>
+  <nav>
+    <button class="nav-btn active" data-page="overview">◫ Overview</button>
+    <button class="nav-btn" data-page="send">↗ Send money</button>
+    <button class="nav-btn" data-page="receive">↙ Receive money</button>
+    <button class="nav-btn" data-page="transactions">▤ Transactions</button>
+    <button class="nav-btn" data-page="admin">⚙ Demo controls</button>
+  </nav>
+  <div class="sidebar-bottom">NOVARA BANK<br>Romanian digital banking concept<br><br>Version 1.0.0</div>
+</aside>
+
+<main class="main">
+<header class="top">
+  <h2 id="pageTitle">Overview</h2>
+  <div class="user">● Demo Customer</div>
+</header>
+
+<div class="notice">
+  DEMO ONLY — All balances, account details and transfers are fictional.
+  No real money is held or transferred.
+</div>
+
+<section class="page active" id="overview">
+  <div class="cards">
+    <div class="balance">
+      <div class="label">TOTAL ACCOUNT BALANCE</div>
+      <div class="amount" id="mainBalance">50,000.00 RON</div>
+      <div class="small" style="color:#d4ddf7;margin-top:9px">NOVARA DEMO ACCOUNT</div>
+      <div class="actions">
+        <button class="btn" onclick="showPage('send')">↗ Send money</button>
+        <button class="btn light" onclick="showPage('receive')">↙ Receive</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="label">ACCOUNT STATUS</div>
+      <div class="stat positive" id="status">Active</div>
+      <p class="small">Demo account</p>
+    </div>
+    <div class="card">
+      <div class="label">ACCOUNT NUMBER</div>
+      <div class="account-number">NOVARA-DEMO-001</div>
+      <p class="small">Fictional reference, not an IBAN</p>
+    </div>
+    <div class="card">
+      <div class="label">MONEY RECEIVED</div>
+      <div class="stat positive" id="received">0.00 RON</div>
+    </div>
+    <div class="card">
+      <div class="label">MONEY SENT</div>
+      <div class="stat" id="sent">0.00 RON</div>
+    </div>
+  </div>
+  <div class="card">
+    <h3>Recent transactions</h3>
+    <div id="recent"></div>
+  </div>
+</section>
+
+<section class="page" id="send">
+  <div class="card">
+    <h3>Send money</h3>
+    <p class="small">Create a simulated RON transfer.</p>
+    <form id="sendForm">
+      <div class="field">
+        <label>Recipient name</label>
+        <input id="recipient" required placeholder="Enter recipient name">
+      </div>
+      <div class="field">
+        <label>Demo account reference</label>
+        <input id="reference" required placeholder="e.g. NOVARA-DEMO-002">
+      </div>
+      <div class="field">
+        <label>Amount (RON)</label>
+        <input id="sendAmount" type="number" min="0.01" step="0.01" required placeholder="0.00">
+      </div>
+      <div class="field">
+        <label>Payment description</label>
+        <input id="description" placeholder="What is this payment for?">
+      </div>
+      <button class="btn" type="submit">Confirm demo transfer</button>
+    </form>
+    <p class="small">Transfers only change this local demonstration account.</p>
+  </div>
+</section>
+
+<section class="page" id="receive">
+  <div class="card">
+    <h3>Receive money</h3>
+    <p class="small">Your fictional demo account details</p>
+    <div class="field">
+      <label>Account holder</label>
+      <div class="account-number">NOVARA Demo Customer</div>
+    </div>
+    <div class="field">
+      <label>Demo account reference</label>
+      <div class="account-number">NOVARA-DEMO-001</div>
+    </div>
+    <div class="field">
+      <label>Currency</label>
+      <div class="account-number">RON - Romanian Leu</div>
+    </div>
+    <hr style="border:0;border-top:1px solid #e9edf4;margin:25px 0">
+    <h3>Simulate incoming payment</h3>
+    <form id="receiveForm">
+      <div class="field">
+        <label>Sender name</label>
+        <input id="sender" required placeholder="Enter sender name">
+      </div>
+      <div class="field">
+        <label>Amount (RON)</label>
+        <input id="receiveAmount" type="number" min="0.01" step="0.01" required placeholder="0.00">
+      </div>
+      <div class="field">
+        <label>Description</label>
+        <input id="receiveDescription" placeholder="Incoming payment">
+      </div>
+      <button class="btn green" type="submit">Simulate received money</button>
+    </form>
+  </div>
+</section>
+
+<section class="page" id="transactions">
+  <div class="card">
+    <h3>Transaction history</h3>
+    <div id="allTransactions"></div>
+  </div>
+</section>
+
+<section class="page" id="admin">
+  <div class="card">
+    <h3>Demo account controls</h3>
+    <p class="small">These controls are for local testing only. They are not a secure production admin panel.</p>
+    <div class="field">
+      <label>Set demo account balance (RON)</label>
+      <input type="number" id="newBalance" min="0" step="0.01">
+    </div>
+    <button class="btn" onclick="setBalance()">Update demo balance</button>
+    <hr style="border:0;border-top:1px solid #e9edf4;margin:25px 0">
+    <h3>Account status</h3>
+    <button class="btn light" onclick="toggleStatus()">Toggle active / suspended</button>
+    <hr style="border:0;border-top:1px solid #e9edf4;margin:25px 0">
+    <h3>Demo data</h3>
+    <button class="btn danger" onclick="resetDemo()">Reset all demo data</button>
+  </div>
+</section>
+
+<div class="footer">
+  NOVARA is an independent fictional banking interface concept.
+  Not a licensed bank. No real payments, deposits or financial services.
+</div>
+</main>
+</div>
+
+<script>
+const initialState = {
+  balance: 50000,
+  received: 0,
+  sent: 0,
+  status: "Active",
+  transactions: []
+};
+
+let state;
+try {
+  state = JSON.parse(localStorage.getItem("novara-demo")) || initialState;
+  if (typeof state.balance !== "number" ||
+      !Array.isArray(state.transactions)) throw Error();
+} catch {
+  state = structuredClone(initialState);
+}
+
+function save() {
+  localStorage.setItem("novara-demo", JSON.stringify(state));
+  render();
+}
+
+function money(value) {
+  return Number(value).toLocaleString("en-GB", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  }) + " RON";
+}
+
+function showPage(page) {
+  document.querySelectorAll(".page").forEach(el => el.classList.remove("active"));
+  document.querySelectorAll(".nav-btn").forEach(el => el.classList.remove("active"));
+  document.getElementById(page).classList.add("active");
+  document.querySelector(`[data-page="${page}"]`).classList.add("active");
+  document.getElementById("pageTitle").textContent =
+    page.charAt(0).toUpperCase() + page.slice(1);
+  render();
+}
+
+document.querySelectorAll(".nav-btn").forEach(btn => {
+  btn.addEventListener("click", () => showPage(btn.dataset.page));
+});
+
+function render() {
+  document.getElementById("mainBalance").textContent = money(state.balance);
+  document.getElementById("received").textContent = money(state.received);
+  document.getElementById("sent").textContent = money(state.sent);
+  document.getElementById("status").textContent = state.status;
+  document.getElementById("newBalance").value = state.balance;
+
+  const html = list => {
+    if (!list.length) return '<div class="empty">No transactions yet.</div>';
+    return list.map(tx => `
+      <div class="transaction">
+        <div>
+          <div class="tx-title">${escapeHTML(tx.name)}</div>
+          <div class="tx-date">${escapeHTML(tx.date)} · ${escapeHTML(tx.description)}</div>
+        </div>
+        <div class="${tx.type === 'in' ? 'positive' : 'negative'}">
+          ${tx.type === 'in' ? '+' : '-'}${money(tx.amount)}
+        </div>
+      </div>`).join("");
+  };
+
+  document.getElementById("recent").innerHTML = html(state.transactions.slice(0,5));
+  document.getElementById("allTransactions").innerHTML = html(state.transactions);
+}
+
+function escapeHTML(value) {
+  return String(value).replace(/[&<>"']/g, c => ({
+    "&":"&amp;", "<":"&lt;", ">":"&gt;",
+    '"':"&quot;", "'":"&#39;"
+  })[c]);
+}
+
+function addTransaction(type, name, amount, description) {
+  state.transactions.unshift({
+    id: crypto.randomUUID(),
+    type, name, amount, description: description || "Demo payment",
+    date: new Date().toLocaleString()
+  });
+}
+
+document.getElementById("sendForm").addEventListener("submit", e => {
+  e.preventDefault();
+  const amount = Number(document.getElementById("sendAmount").value);
+  const name = document.getElementById("recipient").value.trim();
+  const ref = document.getElementById("reference").value.trim();
+  const desc = document.getElementById("description").value.trim();
+
+  if (state.status !== "Active") return alert("Demo account is suspended.");
+  if (!Number.isFinite(amount) || amount <= 0) return alert("Enter a valid amount.");
+  if (amount > state.balance) return alert("Insufficient demo balance.");
+
+  if (!confirm(`Simulate sending ${money(amount)} to ${name}?`)) return;
+
+  state.balance -= amount;
+  state.sent += amount;
+  addTransaction("out", name + " (" + ref + ")", amount, desc);
+  save();
+  e.target.reset();
+  alert("Demo transfer completed. No real money was sent.");
+});
+
+document.getElementById("receiveForm").addEventListener("submit", e => {
+  e.preventDefault();
+  const amount = Number(document.getElementById("receiveAmount").value);
+  const name = document.getElementById("sender").value.trim();
+  const desc = document.getElementById("receiveDescription").value.trim();
+
+  if (state.status !== "Active") return alert("Demo account is suspended.");
+  if (!Number.isFinite(amount) || amount <= 0) return alert("Enter a valid amount.");
+  if (!confirm(`Simulate receiving ${money(amount)} from ${name}?`)) return;
+
+  state.balance += amount;
+  state.received += amount;
+  addTransaction("in", name, amount, desc);
+  save();
+  e.target.reset();
+  alert("Demo incoming payment recorded. No real money was received.");
+});
+
+function setBalance() {
+  const value = Number(document.getElementById("newBalance").value);
+  if (!Number.isFinite(value) || value < 0) return alert("Invalid balance.");
+  if (!confirm("Set the demo balance to " + money(value) + "?")) return;
+  state.balance = value;
+  save();
+  alert("Demo balance updated.");
+}
+
+function toggleStatus() {
+  state.status = state.status === "Active" ? "Suspended" : "Active";
+  save();
+}
+
+function resetDemo() {
+  if (!confirm("Reset all local demo account data?")) return;
+  state = structuredClone(initialState);
+  save();
+}
+
+render();
+</script>
+</body>
+</html>
