@@ -183,8 +183,20 @@ main {
 .balance-amount {
   font-size: 36px;
   font-weight: bold;
-  margin: 18px 0;
+  margin: 18px 0 8px;
   letter-spacing: .5px;
+}
+
+.pending-label {
+  display: inline-block;
+  background: #fff0d3;
+  color: #916b21;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 11px;
+  font-weight: bold;
+  position: relative;
+  z-index: 1;
 }
 
 .balance-bottom {
@@ -193,6 +205,7 @@ main {
   align-items: center;
   position: relative;
   z-index: 1;
+  margin-top: 15px;
 }
 
 .balance-bottom small {
@@ -562,7 +575,7 @@ footer {
       <section class="card balance-card">
         <div class="balance-label">Displayed sample balance</div>
         <div class="balance-amount" id="balance">RON 20,000.00</div>
-        <div class="loan-status">PENDING LOAN</div>
+        <div class="pending-label">PENDING LOAN</div>
 
         <div class="balance-bottom">
           <div>
@@ -585,7 +598,7 @@ footer {
 
         <div class="account-row">
           <span>Account number</span>
-          <strong>NOVARA-TEST-001</strong>
+          <strong>001234567890</strong>
         </div>
 
         <div class="account-row">
@@ -755,15 +768,16 @@ footer {
 
 <script>
 const DEFAULT_BALANCE = 20000;
+const BALANCE_VERSION = "2";
+
+if (localStorage.getItem("novaraBalanceVersion") !== BALANCE_VERSION) {
+  localStorage.setItem("novaraBalance", DEFAULT_BALANCE.toFixed(2));
+  localStorage.setItem("novaraBalanceVersion", BALANCE_VERSION);
+}
 
 let balance = Number(localStorage.getItem("novaraBalance"));
 
-// Apply the requested balance update once, even if an older value was saved.
-if (localStorage.getItem("novaraBalanceVersion") !== "pending-loan-20000-v1") {
-  balance = DEFAULT_BALANCE;
-  localStorage.setItem("novaraBalanceVersion", "pending-loan-20000-v1");
-  localStorage.setItem("novaraBalance", balance.toFixed(2));
-} else if (!Number.isFinite(balance) || balance < 0) {
+if (!Number.isFinite(balance) || balance < 0) {
   balance = DEFAULT_BALANCE;
 }
 
