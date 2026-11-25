@@ -560,8 +560,9 @@ footer {
     <div class="dashboard-grid">
 
       <section class="card balance-card">
-        <div class="balance-label">Available account balance</div>
-        <div class="balance-amount" id="balance">RON 25,000.00</div>
+        <div class="balance-label">Displayed sample balance</div>
+        <div class="balance-amount" id="balance">RON 20,000.00</div>
+        <div class="loan-status">PENDING LOAN</div>
 
         <div class="balance-bottom">
           <div>
@@ -753,11 +754,16 @@ footer {
 </footer>
 
 <script>
-const DEFAULT_BALANCE = 25000;
+const DEFAULT_BALANCE = 20000;
 
 let balance = Number(localStorage.getItem("novaraBalance"));
 
-if (!Number.isFinite(balance) || balance < 0) {
+// Apply the requested balance update once, even if an older value was saved.
+if (localStorage.getItem("novaraBalanceVersion") !== "pending-loan-20000-v1") {
+  balance = DEFAULT_BALANCE;
+  localStorage.setItem("novaraBalanceVersion", "pending-loan-20000-v1");
+  localStorage.setItem("novaraBalance", balance.toFixed(2));
+} else if (!Number.isFinite(balance) || balance < 0) {
   balance = DEFAULT_BALANCE;
 }
 
